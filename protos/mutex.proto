@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package grpc_lock;
+option go_package = "./protos";
+import "google/protobuf/timestamp.proto";
+
+message GCSMutex {
+    string bucket = 1;
+    string object = 2;
+    int64 generation = 3;
+    string lock_id = 4;
+    google.protobuf.Timestamp expires = 5;
+}

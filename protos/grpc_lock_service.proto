@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package grpc_lock;
+option go_package = "./protos";
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/empty.proto";
+import "mutex.proto";
+
+message NewMutexRequest {
+    string bucket = 1;
+    string object = 2;
+    google.protobuf.Duration duration = 3;
+}
+
+message ExtendMutexRequest {
+    grpc_lock.GCSMutex mutex = 1;
+    google.protobuf.Duration duration = 2;
+}
+
+service GrpcLockService {
+    rpc NewMutex(NewMutexRequest) returns (grpc_lock.GCSMutex) {};
+    rpc CertifyMutex(grpc_lock.GCSMutex) returns (grpc_lock.GCSMutex) {};
+    rpc ReleaseMutex(grpc_lock.GCSMutex) returns (google.protobuf.Empty) {};
+    rpc ExtendMutex(ExtendMutexRequest) returns (grpc_lock.GCSMutex) {};
+}
